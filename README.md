@@ -10,14 +10,10 @@ enter your key there.
 
 Features so far:
 
-* Create custom post type named Location
-    Includes extra fields for address, phone, latitude, longitude, short description, and active listing toggle
+* Create custom post type named Location: Includes extra fields for address, phone, latitude, longitude, short description, and active listing toggle
     
-* Automatic latitude and longitude
-    Fill address field and click Latitude or Longitude label for automatic GPS lookup and filling fields with values
+* Automatic latitude and longitude: Fill address field and click Latitude or Longitude label for automatic GPS lookup and filling fields with values
     
-* Example template for displaying a Google Map
-    Displays interactive map with the Google Maps API populated by a category of the location custom post type, 
-    includes sample style customization
+* Example template for displaying a Google Map: Displays interactive map with the Google Maps API populated by a category of the location custom post type, includes sample style customization
 
 
