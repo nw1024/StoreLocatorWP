@@ -1,0 +1,17 @@
+a.infoboxtitle {
+    text-decoration: none;
+    color: #1a1a1a;
+    font-size: large;
+    font-weight: bold;
+}
+
+.infobox p {
+    margin: 0.2em 0 0.2em;
+    line-height: 1.1em;
+}
+
+#map {
+    width: 750px;
+    height: 520px;
+    margin: auto;
+}
