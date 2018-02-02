@@ -16,9 +16,9 @@ $GOOGLEKEY = ""; // Google Maps API key goes here
 // TODO settings page with API key field
 
 function storelocatorwp_theme() {
-    wp_enqueue_style( 'storelocatorwp', plugins_url('/storelocatorwp.css', __FILE__ )  );
+    wp_enqueue_style('storelocatorwp', plugins_url('/storelocatorwp.css', __FILE__ ));
 }
-add_action( 'wp_enqueue_scripts', 'storelocatorwp_theme' );
+add_action('wp_enqueue_scripts', 'storelocatorwp_theme');
 
 function storelocatorwp_adminstyle() {
   echo '<style>
@@ -32,7 +32,7 @@ add_action('admin_head', 'storelocatorwp_adminstyle');
 
 function storelocatorwp_register() {
 	
-	register_post_type( 'location',
+	register_post_type('location',
 		array(
 			'labels' => array(
 				'name' => __( 'Locations' ),
@@ -51,6 +51,8 @@ function storelocatorwp_register() {
 		)
 	);
 
+	// TODO display text list of locations by county below map
+
 	register_taxonomy(
 		'county',
 		'location',
@@ -63,7 +65,7 @@ function storelocatorwp_register() {
 
 }
 
-add_action( 'init', 'storelocatorwp_register', 0 );
+add_action('init', 'storelocatorwp_register', 0);
 
 function get_storelocatorwp_template( $archive_template ) {
         global $post;
@@ -74,17 +76,7 @@ function get_storelocatorwp_template( $archive_template ) {
         return $archive_template;
 }
 
-add_filter(  'archive_template',  'get_storelocatorwp_template' ) ;
-
-
-function storelocatorwp_redirect_homepage() {
-    //if ( is_page( 'home' ) ) {
-    //    wp_redirect( home_url( '/storelocations/' ) );
-    //    exit();
-    //}
-}
-
-//add_action( 'template_redirect', 'storelocatorwp_redirect_homepage' );
+add_filter('archive_template', 'get_storelocatorwp_template') ;
 
 function storelocatorwp_listfull($args) {
 	extract($args);
@@ -94,7 +86,7 @@ function storelocatorwp_listfull($args) {
 	echo $after_widget;   
 }
 
-register_sidebar_widget('StoreLocatorWP Listing Full',    'storelocatorwp_listfull');
+register_sidebar_widget('StoreLocatorWP Listing Full', 'storelocatorwp_listfull');
 
 function storelocatorwp_listspecials($args) {
 	extract($args);
@@ -104,7 +96,7 @@ function storelocatorwp_listspecials($args) {
 	echo $after_widget;   
 }
 
-register_sidebar_widget('StoreLocatorWP Listing Specials',    'storelocatorwp_listspecials');
+register_sidebar_widget('StoreLocatorWP Listing Specials', 'storelocatorwp_listspecials');
 
 function storelocatorwp_listdetails($args) {
 	extract($args);
@@ -114,7 +106,7 @@ function storelocatorwp_listdetails($args) {
 	echo $after_widget;   
 }
 
-register_sidebar_widget('StoreLocatorWP Listing Details',    'storelocatorwp_listdetails');
+register_sidebar_widget('StoreLocatorWP Listing Details', 'storelocatorwp_listdetails');
 
 class storelocator_Meta_Box {
 
@@ -145,12 +137,13 @@ class storelocator_Meta_Box {
 
 	}
 	
+	// Admin form for custom post type
 	public function render_metabox( $post ) {
 
-		// Add nonce for security and authentication.
+		// Add nonce for security and authentication
 		wp_nonce_field( 'storelocator_nonce_action', 'storelocator_nonce' );
 
-		// Retrieve an existing value from the database.
+		// Retrieve an existing value from the database
 		$storelocator_active = get_post_meta( $post->ID, 'storelocator_active', true );
 		$storelocator_desc = get_post_meta( $post->ID, 'storelocator_desc', true );
 
@@ -160,8 +153,7 @@ class storelocator_Meta_Box {
 		$storelocator_website = get_post_meta( $post->ID, 'storelocator_website', true );
 		$storelocator_phone = get_post_meta( $post->ID, 'storelocator_phone', true );
 
-		// Set default values.
-		
+		// Set default values		
 		if( empty( $storelocator_active ) ) $storelocator_active = '';
 		if( empty( $storelocator_desc ) ) $storelocator_desc = '';
 		
@@ -171,15 +163,12 @@ class storelocator_Meta_Box {
 		if( empty( $storelocator_website ) ) $storelocator_website = '';
 		if( empty( $storelocator_phone ) ) $storelocator_phone = '';
 
-		// Form fields.
-		
+		// Form fields
 		echo '<div id="locations-form">';		
-
 		echo '<table class="form-table">';
 
 		echo '	<tr>';
-		echo '	<td>';
-		echo '  <input type="checkbox" value="checked" name="storelocator_active[]" ' . $storelocator_active . ' id="active" /> Active <br/><br/>';
+		echo '	<td><input type="checkbox" value="checked" name="storelocator_active[]" ' . $storelocator_active . ' id="active" /> Active <br/><br/>';
 		echo '  <label for="storelocator_desc" class="storelocator_desc_label">' . __( 'Description', 'storelocatorwp' ) . '</label></td>';
 		echo '	</tr>';
 		
@@ -189,21 +178,16 @@ class storelocator_Meta_Box {
 		
 		echo '</table>';
 
-		echo "
-
-		<div style='display: none' id='map'></div>
-		
+		// Script for getting GPS coordinates from address field		
+		echo "<div style='display: none' id='map'></div>
 		<script>
-		
 			var map;
-			
 			function initialize() {	
 				map = new google.maps.Map(document.getElementById('map'), {
 				center: {lat: 47.4464241, lng: -122.468337},
 				zoom: 15
 				});	  
 			}
-			
 			function getaddress() {		
 				var addressquery = document.getElementById('title').value;
 				  // Search for Google's office in Australia.
@@ -215,9 +199,8 @@ class storelocator_Meta_Box {
 				  var service = new google.maps.places.PlacesService(map);
 				  service.textSearch(request, addresscallback);
 			}
-			
 			// Checks that the PlacesServiceStatus is OK, and adds a marker
-			// using the place ID and location from the PlacesService.
+			// using the place ID and location from the PlacesService
 			function addresscallback(results, status) {	
 			  if (status == google.maps.places.PlacesServiceStatus.OK) {
 				console.log(results);
@@ -227,7 +210,6 @@ class storelocator_Meta_Box {
 			  geocode();
 
 			}
-
 			function geocode() {
 				var geocoder = new google.maps.Geocoder();
 				var address = document.getElementById('storelocator_address').value;
@@ -241,7 +223,6 @@ class storelocator_Meta_Box {
 					document.getElementById('storelocator_lng').value = longitude	
 				});
 			}
-
 		</script>
 		";
 		
@@ -275,46 +256,38 @@ class storelocator_Meta_Box {
 		echo '	</tr>';
 		
 		echo '</table>';
-		
 		echo '</div>';
-
-		echo "
-		
-		 <script async defer src='https://maps.googleapis.com/maps/api/js?key={$GOOGLEKEY}&v=3&callback=initialize'>
-		    </script>
-			
-			";
+		echo "<script async defer src='https://maps.googleapis.com/maps/api/js?key={$GOOGLEKEY}&v=3&callback=initialize'></script>";
 
 	} 
 
 	public function save_metabox( $post_id, $post ) {
 
-		// Add nonce for security and authentication.
+		// Add nonce for security and authentication
 		$nonce_name   = $_POST['storelocator_nonce'];
 		$nonce_action = 'storelocator_nonce_action';
 
-		// Check if a nonce is set.
+		// Check if a nonce is set
 		if ( ! isset( $nonce_name ) )
 			return;
 
-		// Check if a nonce is valid.
+		// Check if a nonce is valid
 		if ( ! wp_verify_nonce( $nonce_name, $nonce_action ) )
 			return;
 
-		// Check if the user has permissions to save data.
+		// Check if the user has permissions to save data
 		if ( ! current_user_can( 'edit_post', $post_id ) )
 			return;
 
-		// Check if it's not an autosave.
+		// Check if it's not an autosave
 		if ( wp_is_post_autosave( $post_id ) )
 			return;
 
-		// Check if it's not a revision.
+		// Check if it's not a revision
 		if ( wp_is_post_revision( $post_id ) )
 			return;
 
-		// Sanitize user input.
-
+		// Sanitize user input
 		$storelocator_active = isset( $_POST[ 'storelocator_active' ] ) ?  $_POST[ 'storelocator_active' ][0]  : '';
 		$storelocator_desc = isset( $_POST[ 'storelocator_desc' ] ) ?  $_POST[ 'storelocator_desc' ]  : '';
 		

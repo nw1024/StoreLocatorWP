@@ -8,13 +8,9 @@
 
 	<?php
 
-	$selected = array();
-
 	$markerlist = "";
-	
 	$markerlist .= "var locations = [";		
-	$didpost = false;
-
+	
 	while ( have_posts() ) : the_post();			
 
 			if (get_post_meta(get_the_ID(), "storelocator_lat", true) != "" && get_post_meta(get_the_ID(), "storelocator_lng", true) != "") {
@@ -328,8 +324,6 @@ $GOOGLEKEY = ""; // Google Maps API key goes here
 ?>
 	
 	<div id="map"> </div>
-	  
-	<div class="clearboth"></div>
 
 </div>
 
