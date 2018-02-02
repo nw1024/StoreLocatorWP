@@ -17,3 +17,5 @@ Features so far:
 * Example template for displaying a Google Map: Displays interactive map with the Google Maps API populated by a category of the location custom post type, includes sample style customization
 
 * Auto zoom and center to bounds of all visible markers on map
+
+* Click map marker for customized popup information div, includes featured image from post and permalink
